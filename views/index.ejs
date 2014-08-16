@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Socket.IO Chat</title>
+		<link rel="stylesheet" type="text/css" charset="utf-8" href="../public/stylesheets/index.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script>
+
+				var socket = io.connect();
+			$(function() {
+				socket.on('push', function(data){
+					$('#logs').append($('<li>').text(data));
+				});
+				
+			});
+
+			function room() {
+				var roomname = $('#roomname').val();
+				if (roomname != '') {
+					socket.emit('room', { room: roomname});
+				}
+                        }
+
+			function send() {
+				var str = $('#msg').val();
+				
+				if (str != '') {
+					socket.emit('send', { message: str});
+					
+				}
+				$('#msg').val('');
+			}
+		</script>
+	</head>
+	<body>
+		<input type="text" id="roomname">
+		<input type="button" value="room" onClick="room()">
+		<input type="text" id="msg">
+		<input type="button" value="send" onClick="send()">
+		<ul id="logs"></ul>	
+	</body>
+</html>
